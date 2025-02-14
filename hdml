@@ -1,0 +1,77 @@
+package com.example.organizadoracademico
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            OrganizadorAcademicoApp()
+        }
+    }
+}
+
+@Composable
+fun OrganizadorAcademicoApp() {
+    val navController = rememberNavController()
+    MaterialTheme {
+        Scaffold(
+            topBar = { TopAppBar(title = { Text("Organizador Acadêmico") }) }
+        ) { paddingValues ->
+            NavHost(
+                navController = navController,
+                startDestination = "home",
+                modifier = Modifier.padding(paddingValues)
+            ) {
+                composable("home") { HomeScreen(navController) }
+                composable("notas") { NotasScreen() }
+                composable("agenda") { AgendaScreen() }
+            }
+        }
+    }
+}
+
+@Composable
+fun HomeScreen(navController: androidx.navigation.NavController) {
+    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+        Button(onClick = { navController.navigate("notas") }) {
+            Text("Anotações")
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(onClick = { navController.navigate("agenda") }) {
+            Text("Agenda")
+        }
+    }
+}
+
+@Composable
+fun NotasScreen() {
+    var nota by remember { mutableStateOf("") }
+    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+        Text("Minhas Anotações", style = MaterialTheme.typography.headlineSmall)
+        OutlinedTextField(
+            value = nota,
+            onValueChange = { nota = it },
+            label = { Text("Digite sua nota") },
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
+}
+
+@Composable
+fun AgendaScreen() {
+    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+        Text("Agenda Acadêmica", style = MaterialTheme.typography.headlineSmall)
+        // Aqui pode ser adicionado um calendário
+    }
+}
